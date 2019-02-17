@@ -27,6 +27,8 @@ USAGE
         Generate password for 'string'.
     $_NAME_ -f 'file'
         Generate password for file.
+    $_NAME_ -r [bytes]
+        Print random string. If 'bytes' specified will use specified bytes of random data for input. Default: 16.
     $_NAME_ --help
         Show this help.
 
@@ -37,6 +39,10 @@ EXAMPLES
         Out: slM8y5DZpaXX5yqBbpyHw
     $_NAME_ -f 'picture.png'
         Out: dA9gZR290cDEkt4DczVfTA
+    $_NAME_ -r
+        Out: mbNJ0vgRQvgbrdvOXpCg
+    $_NAME_ -r 32
+        Out: GTILy9aUh87lz75VcwY1KJ9rpzTkwESP1X1tGsHsgI
 
 COPYRIGHT
     $_NAME_ Copyright (C) 2019 BrainFucker
@@ -78,6 +84,20 @@ if [ "$1" = -f ]; then
     fi
     
     md5sum "$2" | awk '{print $1}' | xxd -p -r | base64 | sed 's/\/\|\+\|=//g'
+elif [ "$1" = -r ]; then
+    # Generating random string
+    if [ -z "$2" ]; then
+        BS=16
+    else
+        BS="$2"
+    fi
+    
+    if [ ! -c /dev/urandom ]; then
+        errlog '/dev/urandom not found or not a character device.'
+        exit 1
+    fi
+    
+    dd if=/dev/urandom bs="$BS" count=1 status=none | base64 | sed 's/\/\|\+\|=//g'
 else
     echo -n "$1" | md5sum | awk '{print $1}' | xxd -p -r | base64 | sed 's/\/\|\+\|=//g'
 fi
