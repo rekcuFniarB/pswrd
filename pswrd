@@ -1,0 +1,85 @@
+#!/bin/sh
+
+##  pswrd - simple password generating util.
+##  Copyright (C) 2019  BrainFucker <retratserif@gmail.com>
+##  
+##  This program is free software: you can redistribute it and/or modify
+##  it under the terms of the GNU General Public License as published by
+##  the Free Software Foundation, either version 3 of the License, or
+##  (at your option) any later version.
+##  
+##  This program is distributed in the hope that it will be useful,
+##  but WITHOUT ANY WARRANTY; without even the implied warranty of
+##  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+##  GNU General Public License for more details.
+
+## print messages to stderr
+errlog () {
+    echo "$@" 1>&2
+}
+
+_NAME_="$(basename "$0")"
+
+USAGE="$_NAME_ - Password generating util.
+
+USAGE
+    $_NAME_ 'string'
+        Generate password for 'string'.
+    $_NAME_ -f 'file'
+        Generate password for file.
+    $_NAME_ --help
+        Show this help.
+
+EXAMPLES
+    $_NAME_ 'https://github.com/rekcuFniarB'
+        Out: m2MOQDCpeH1U8YGP3rKWHw
+    $_NAME_ 'Facebook sucks'
+        Out: slM8y5DZpaXX5yqBbpyHw
+    $_NAME_ -f 'picture.png'
+        Out: dA9gZR290cDEkt4DczVfTA
+
+COPYRIGHT
+    pswrd Copyright (C) 2019 BrainFucker
+    This program comes with ABSOLUTELY NO WARRANTY.
+    This is free software, and you are welcome to redistribute it
+    under certain conditions."
+
+if [ -z "$1" ]; then
+    errlog "$USAGE"
+    exit 1
+fi
+
+if [ "$1" = --help ] || [ "$1" = -h ]; then
+    errlog "$USAGE"
+    exit
+fi
+
+## check for installed requirements
+UTILS="md5sum awk sed xxd base64"
+for _util in $UTILS; do
+    if [ -z "$(which "$_util")" ]; then
+        errlog "Error: util '$_util' not found."
+        exit 1
+    fi
+done
+
+
+if [ "$1" = -f ]; then
+    # Using file as input
+    if [ -z "$2" ]; then
+        errlog 'No file supplied'
+        errlog "$USAGE"
+        exit 1
+    fi
+    
+    if [ ! -f "$2" ]; then
+        errlog "File '$2' not found."
+        exit 1
+    fi
+    
+    md5sum "$2" | awk '{print $1}' | xxd -p -r | base64 | sed 's/\/\|\+\|=//g'
+else
+    echo -n "$1" | md5sum | awk '{print $1}' | xxd -p -r | base64 | sed 's/\/\|\+\|=//g'
+fi
+
+
