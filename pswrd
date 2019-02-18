@@ -87,7 +87,9 @@ if [ "$1" = -f ]; then
 elif [ "$1" = -r ]; then
     # Generating random string
     if [ -z "$2" ]; then
-        BS=16
+        BS=15
+    elif [ "$2" -lt 3 ]; then
+        BS=3
     else
         BS="$2"
     fi
