@@ -28,7 +28,8 @@ Just copy the script to any path you will run it from (`/usr/local/bin` for exam
 ### Requirements:
 
 * `md5sum`
-* `awk`
+* `head`
 * `sed`
 * `xxd`
 * `base64`
+* `dd`

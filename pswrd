@@ -61,7 +61,7 @@ if [ "$1" = --help ] || [ "$1" = -h ]; then
 fi
 
 ## check for installed requirements
-UTILS="md5sum awk sed xxd base64"
+UTILS="md5sum head sed xxd base64 dd"
 for _util in $UTILS; do
     if [ -z "$(which "$_util")" ]; then
         errlog "Error: util '$_util' not found."
@@ -83,7 +83,7 @@ if [ "$1" = -f ]; then
         exit 1
     fi
     
-    md5sum "$2" | awk '{print $1}' | xxd -p -r | base64 | sed 's/\/\|\+\|=//g'
+    md5sum "$2" | head -c30 | xxd -p -r | base64 | sed 's/\/\|\+\|=//g'
 elif [ "$1" = -r ]; then
     # Generating random string
     if [ -z "$2" ]; then
@@ -92,6 +92,8 @@ elif [ "$1" = -r ]; then
         BS="$2"
     fi
     
+    BS=$(( (BS/3)*3 ))
+    
     if [ ! -c /dev/urandom ]; then
         errlog '/dev/urandom not found or not a character device.'
         exit 1
@@ -99,7 +101,7 @@ elif [ "$1" = -r ]; then
     
     dd if=/dev/urandom bs="$BS" count=1 status=none | base64 | sed 's/\/\|\+\|=//g'
 else
-    echo -n "$1" | md5sum | awk '{print $1}' | xxd -p -r | base64 | sed 's/\/\|\+\|=//g'
+    echo -n "$1" | md5sum | head -c30 | xxd -p -r | base64 | sed 's/\/\|\+\|=//g'
 fi
 
 
