@@ -14,7 +14,9 @@ Above command generates password for string "any string". Example:
 
 Output:
 
-    m2MOQDCpeH1U8YGP3rKWHw
+    m2MOQDCpeH1U8YGP3rKW
+
+Calling witn no args will prompt for input.
 
 You can also supply a file instead of string:
 
