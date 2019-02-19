@@ -25,6 +25,8 @@ USAGE="$_NAME_ - Password generating util.
 USAGE
     $_NAME_ 'string'
         Generate password for 'string'.
+    $_NAME_
+        Running with no args will prompt for passphrase.
     $_NAME_ -f 'file'
         Generate password for file.
     $_NAME_ -r [bytes]
@@ -34,9 +36,9 @@ USAGE
 
 EXAMPLES
     $_NAME_ 'https://github.com/rekcuFniarB'
-        Out: m2MOQDCpeH1U8YGP3rKWHw
+        Out: m2MOQDCpeH1U8YGP3rKW
     $_NAME_ 'Facebook sucks'
-        Out: slM8y5DZpaXX5yqBbpyHw
+        Out: slM8y5DZpaXX5yqBbpy
     $_NAME_ -f 'picture.png'
         Out: dA9gZR290cDEkt4DczVfTA
     $_NAME_ -r
@@ -49,11 +51,6 @@ COPYRIGHT
     This program comes with ABSOLUTELY NO WARRANTY.
     This is free software, and you are welcome to redistribute it
     under certain conditions."
-
-if [ -z "$1" ]; then
-    errlog "$USAGE"
-    exit 1
-fi
 
 if [ "$1" = --help ] || [ "$1" = -h ]; then
     errlog "$USAGE"
@@ -69,8 +66,15 @@ for _util in $UTILS; do
     fi
 done
 
-
-if [ "$1" = -f ]; then
+if [ -z "$1" ]; then
+    ## Prompt if no args
+    read -p 'Enter passphrase: ' _str
+    if [ -z "$_str" ]; then
+        errlog 'Error: input must be non empty.'
+        exit 1
+    fi
+    echo -n "$_str" | md5sum | head -c30 | xxd -p -r | base64 | sed 's/\/\|\+\|=//g'
+elif [ "$1" = -f ]; then
     # Using file as input
     if [ -z "$2" ]; then
         errlog 'No file supplied'
