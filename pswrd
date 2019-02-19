@@ -58,7 +58,7 @@ if [ "$1" = --help ] || [ "$1" = -h ]; then
 fi
 
 ## check for installed requirements
-UTILS="md5sum head sed xxd base64 dd"
+UTILS="md5sum head sed xxd base64"
 for _util in $UTILS; do
     if [ -z "$(which "$_util")" ]; then
         errlog "Error: util '$_util' not found."
@@ -105,7 +105,7 @@ elif [ "$1" = -r ]; then
         exit 1
     fi
     
-    dd if=/dev/urandom bs="$BS" count=1 status=none | base64 | sed 's/\/\|\+\|=//g'
+    head -c"$BS" /dev/urandom | base64 | sed 's/\/\|\+\|=//g'
 else
     echo -n "$1" | md5sum | head -c30 | xxd -p -r | base64 | sed 's/\/\|\+\|=//g'
 fi

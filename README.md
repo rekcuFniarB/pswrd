@@ -32,4 +32,3 @@ Just copy the script to any path you will run it from (`/usr/local/bin` for exam
 * `sed`
 * `xxd`
 * `base64`
-* `dd`
