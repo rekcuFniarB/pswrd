@@ -1,4 +1,5 @@
 #!/bin/sh
+set -e
 
 ##  pswrd - simple password generating util.
 ##  Copyright (C) 2019  BrainFucker <retratserif@gmail.com>
@@ -67,6 +68,16 @@ EXAMPLES
         Enter password version (default: 1): 1
         KghM436iQpXtYCOS7qFO
 
+NOTES
+    URI scheme recommendations:
+        When full path doesn't matter, it's better to specify just a domain.
+        If subdomain doesn't matter, it's better to not specifying subdomains.
+        But, if You have multiple accounts on the same site, it's better to specify
+          full account URI (with protocol and subdomain, e.g.
+          https://www.example.com/users/username).
+        Specify protocol only when full path is used.
+        For non http accounts email-like scheme may be used (e.g. user@servicename).
+
 COPYRIGHT
     $_NAME_ Copyright (C) 2019 BrainFucker
     This program comes with ABSOLUTELY NO WARRANTY.
@@ -115,7 +126,7 @@ parse_args() {
 } # parse_args()
 
 ## check for installed requirements
-UTILS="md5sum head sed xxd base64"
+UTILS="md5sum head sed xxd base64 stty"
 for _util in $UTILS; do
     if [ -z "$(which "$_util")" ]; then
         errlog "Error: util '$_util' not found."
@@ -179,9 +190,12 @@ else
         
         RESULT="$(echo -n "$INPUT" | md5sum | head -c30 | xxd -p -r | base64)"
     else
-        ## Devault (advanced) mode
+        ## Default (advanced) mode
         if [ -z "$_arg_password" ] || [ "$_arg_password" = 1 ]; then
+            stty -echo
             read -p 'Enter master password: ' _arg_password
+            stty echo
+            errlog
         fi
         
         if [ -z "$_arg_uri" ] || [ "$_arg_uri" = 1 ]; then
