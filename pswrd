@@ -42,6 +42,9 @@ USAGE
     $_NAME_ -alnum
         Remove non alphanumeric chars from output.
     
+    $_NAME_ -nc
+        Don't put result to clipboard.
+    
     $_NAME_ -help
         Show this help.
 
@@ -136,6 +139,12 @@ done
 
 parse_args "$@"
 
+## Check if clipboard available (running under X session).
+if [ -n "$DISPLAY" ] && [ -n "$(which xclip)" ] && [ -z "$_arg_nc" ]; then
+    CLIPBOARD=1
+fi
+
+
 if [ -n "$_arg_help" ] || [ -n "$_arg_h" ]; then
     ## Show help message and exit
     errlog "$USAGE"
@@ -228,4 +237,8 @@ if [ -z "$_arg_alnum" ]; then
 else
     ## remove non alnum symbols
     echo "$RESULT" | sed 's/\/\|\+\|=//g'
+fi
+
+if [ -n "$CLIPBOARD" ]; then
+    echo -n "$RESULT" | xclip -selection clipboard
 fi
