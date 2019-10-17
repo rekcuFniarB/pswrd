@@ -24,11 +24,13 @@ USAGE
         Simple mode. Generate password for 'string'. Ommiting 'string' will prompt for input.
     
     $_NAME_
-        Running with no args will prompt for master password, URI and password version. Input also can be specified in args:
+        Running with no args will prompt for master password, username, domain and password version. Input also can be specified in args:
             -password 'string'
                 master password
-            -uri 'string'
-                resource this password is for, ususally it's an URI
+            -user 'string'
+                User name (login).
+            -domain 'string'
+                Service name this password is for (usually domain name).
             -version
                 password version, default: 1
         Any of args above will be promted if ommited.
@@ -48,8 +50,10 @@ USAGE
     $_NAME_ -help
         Show this help.
 
+Output will be placed to the clipboard if xclip util available and -nc arg not specified.
+
 EXAMPLES
-    $_NAME_ -simple 'https://github.com/'
+    $_NAME_ -simple 'https://github.com/username'
         Out: MJf8qbHsiULEMF5VDvG1
     
     $_NAME_ -file 'picture.png'
@@ -61,25 +65,16 @@ EXAMPLES
     $_NAME_ -random 32
         Out: GTILy9aUh87lz75VcwY1KJ9rpzTkwESP1X1tGsHsgI
     
-    $_NAME_ -password 'my master password' -uri 'https://facebook.com/username' -version 1
-        Out: KghM436iQpXtYCOS7qFO
+    $_NAME_ -password 'my master password' -user username -domain 'facebook.com' -version 1
+        Out: L9f2jwYN/3ipAs+8NFnl
     
     Interactive mode:
       $_NAME_
-        Enter master password: my master password
-        Enter resource this password is for (usually URI): https://facebook.com/username
-        Enter password version (default: 1): 1
-        KghM436iQpXtYCOS7qFO
-
-NOTES
-    URI scheme recommendations:
-        When full path doesn't matter, it's better to specify just a domain.
-        If subdomain doesn't matter, it's better to not specifying subdomains.
-        But, if You have multiple accounts on the same site, it's better to specify
-          full account URI (with protocol and subdomain, e.g.
-          https://www.example.com/users/username).
-        Specify protocol only when full path is used.
-        For non http accounts email-like scheme may be used (e.g. user@servicename).
+        Enter master password:
+        Enter user name (default: empty): username
+        Enter service name (usually domain name): facebook.com
+        Enter password version (default: 1):
+        L9f2jwYN/3ipAs+8NFnl
 
 COPYRIGHT
     $_NAME_ Copyright (C) 2019 BrainFucker
@@ -207,9 +202,13 @@ else
             errlog
         fi
         
-        if [ -z "$_arg_uri" ] || [ "$_arg_uri" = 1 ]; then
-            read -p 'Enter resource this password is for (usually URI): ' _arg_uri
-            if [ -z "$_arg_uri" ]; then
+        if [ -z "$_arg_user" ] || [ "$_arg_user" = 1 ]; then
+            read -p 'Enter user name (default: empty): ' _arg_user
+        fi
+        
+        if [ -z "$_arg_domain" ] || [ "$_arg_domain" = 1 ]; then
+            read -p 'Enter service name (usually domain name): ' _arg_domain
+            if [ -z "$_arg_domain" ]; then
                 errlog 'Error: input must be non empty.'
                 exit 1
             fi
@@ -222,7 +221,7 @@ else
             fi
         fi
         
-        INPUT="$_arg_password$_arg_uri$_arg_version"
+        INPUT="$_arg_password$_arg_user$_arg_domain$_arg_version"
         
         if [ -n "$_arg_verbose" ]; then
             errlog "INPUT: $INPUT"

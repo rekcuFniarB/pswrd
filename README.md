@@ -20,11 +20,11 @@ You can also supply a file instead of a string:
 
     pswrd -file ~/picture.png
 
-Calling without `-simple` arg will run in advanced mode prompting for master password, resource and password version. These info may be passed in args `-password`, `-uri` and `-version` accordingly. "Resource" is usually an URI of a resource, requested password is for. "Version" is password version. Default value is "1", increase it when you want make new password for requested resource.
+Calling without `-simple` arg will run in advanced mode prompting for master password, user name, domain and password version. These info may be passed in args `-password`, `-user`, `-domain` and `-version` accordingly. "Version" is password version. Default value is "1", increase it when you want make new password for requested the same user+domain pair.
 
 Example:
 
-    pswrd -password 'my master password' -uri 'https://www.facebook.com/username' -version 2
+    pswrd -password 'my master password' -user 'username' -domain 'facebook.com' -version 2
 
 Output:
 
@@ -33,13 +33,16 @@ Output:
 Or same in interactive mode:
 
     user@computer:/tmp $ pswrd
-    Enter master password: my master password
-    Enter resource this password is for (usually URI): https://www.facebook.com/username
+    Enter master password:
+    Enter user name (default: empty): username
+    Enter service name (usually domain name): facebook.com
     Enter password version (default: 1): 2
     
     V5YVTe8Au7oeDn2pVcCq
 
 Note that `-file` doesn't support master password and version.
+
+Output password string will also be placed to the clipboard if `xclip` util is available and `-nc` arg not specified.
 
 #### Other args
 
