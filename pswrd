@@ -29,6 +29,8 @@ USAGE
                 master password
             -user 'string'
                 User name (login).
+            -type
+                Service type: web, email, ssh, e.t.c. Default: empty.
             -domain 'string'
                 Service name this password is for (usually domain name).
             -version
@@ -46,6 +48,9 @@ USAGE
     
     $_NAME_ -nc
         Don't put result to clipboard.
+    
+    $_NAME_ -compat
+        Compatibility with old version.
     
     $_NAME_ -help
         Show this help.
@@ -205,6 +210,10 @@ else
         if [ -z "$_arg_user" ] || [ "$_arg_user" = 1 ]; then
             read -p 'Enter user name (default: empty): ' _arg_user
         fi
+
+        if [ -z "$_arg_type" ] || [ "$_arg_type" = 1 ]; then
+            read -p 'Enter service type (web, email, ssh, e.t.c. Default: empty): ' _arg_type
+        fi
         
         if [ -z "$_arg_domain" ] || [ "$_arg_domain" = 1 ]; then
             read -p 'Enter service name (usually domain name): ' _arg_domain
@@ -221,7 +230,12 @@ else
             fi
         fi
         
-        INPUT="$_arg_password$_arg_user$_arg_domain$_arg_version"
+        if [ -z "$_arg_compat" ]; then
+            INPUT="$(printf '%s\t' "$_arg_type" "$_arg_password" "$_arg_user" "$_arg_domain")"$_arg_version""
+        else
+            ## Old versions compatibility mode.
+            INPUT="$_arg_type$_arg_password$_arg_user$_arg_domain$_arg_version"
+        fi
         
         if [ -n "$_arg_verbose" ]; then
             errlog "INPUT: $INPUT"
