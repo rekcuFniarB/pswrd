@@ -245,13 +245,14 @@ else
     fi
 fi
 
-if [ -z "$_arg_alnum" ]; then
-    echo "$RESULT"
-else
+if [ -n "$_arg_alnum" ]; then
     ## remove non alnum symbols
-    echo "$RESULT" | sed 's/\/\|\+\|=//g'
+    RESULT="$(echo -n "$RESULT" | sed 's/\/\|\+\|=//g')"
 fi
 
+## put to clipboard if available
 if [ -n "$CLIPBOARD" ]; then
     echo -n "$RESULT" | xclip -selection clipboard
 fi
+
+echo $RESULT
