@@ -255,4 +255,7 @@ if [ -n "$CLIPBOARD" ]; then
     echo -n "$RESULT" | xclip -selection clipboard
 fi
 
-echo $RESULT
+## Print passvord only if -verbose mode or no clipboard
+if [ -n "$_arg_verbose" ] || [ -z "$CLIPBOARD" ]; then
+    echo $RESULT
+fi
