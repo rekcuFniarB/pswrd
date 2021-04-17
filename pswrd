@@ -261,6 +261,14 @@ else
     fi
 fi
 
+## Removing spaces
+if [ -n "$_arg_random" ] && [ "$BS" -gt 59 ]; then
+    for L in $RESULT; do
+        _RESULT="$_RESULT$L"
+    done
+    RESULT="$_RESULT"
+fi
+
 if [ -n "$_arg_alnum" ]; then
     ## remove non alnum symbols
     RESULT="$(echo -n "$RESULT" | sed 's/\/\|\+\|=//g')"
