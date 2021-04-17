@@ -274,6 +274,11 @@ if [ -n "$_arg_alnum" ]; then
     RESULT="$(echo -n "$RESULT" | sed 's/\/\|\+\|=//g')"
 fi
 
+## Replacing slashes
+if [ -z "$_arg_keepslash" ]; then
+    RESULT="$(echo -n "$RESULT" | sed 's#/#_#g')"
+fi
+
 ## put to clipboard if available
 if [ -n "$CLIPBOARD" ]; then
     echo -n "$RESULT" | xclip -selection clipboard > /dev/null
