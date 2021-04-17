@@ -282,4 +282,9 @@ fi
 ## Print passvord only if -verbose mode or no clipboard
 if [ -n "$_arg_verbose" ] || [ -z "$CLIPBOARD" ]; then
     echo $RESULT
+else
+    ## Show only first 3 chars and replacing remaining with *
+    echo -n "$RESULT" | head --bytes=3
+    echo -n "$RESULT" | head --bytes=-3 | sed 's/./*/g'
+    echo
 fi
