@@ -128,6 +128,20 @@ parse_args() {
     done
 } # parse_args()
 
+fn_merge_keys() {
+    local key result
+    for key in "$@"; do
+        if [ -n "$key" ]; then
+            if [ -z "$result" ]; then
+                result="$key"
+            else
+                result="$result\t$key"
+            fi
+        fi
+    done
+    echo "$result"
+}
+
 ## check for installed requirements
 UTILS="md5sum head sed xxd base64 stty"
 for _util in $UTILS; do
@@ -231,9 +245,11 @@ else
         fi
         
         if [ -z "$_arg_compat" ]; then
+            INPUT="$(fn_merge_keys "$_arg_type" "$_arg_password" "$_arg_user" "$_arg_domain" "$_arg_version")"
+        elif [ "$_arg_compat" = 2 ]; then
+            ## Old versions compatibility modes.
             INPUT="$(printf '%s\t' "$_arg_type" "$_arg_password" "$_arg_user" "$_arg_domain")"$_arg_version""
         else
-            ## Old versions compatibility mode.
             INPUT="$_arg_type$_arg_password$_arg_user$_arg_domain$_arg_version"
         fi
         
