@@ -276,7 +276,7 @@ fi
 
 ## put to clipboard if available
 if [ -n "$CLIPBOARD" ]; then
-    echo -n "$RESULT" | xclip -selection clipboard
+    echo -n "$RESULT" | xclip -selection clipboard > /dev/null
 fi
 
 ## Print passvord only if -verbose mode or no clipboard
