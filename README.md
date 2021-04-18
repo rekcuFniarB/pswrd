@@ -10,20 +10,6 @@ Why this wheel was reinvented? Well, I needed a simple util which doesn't requir
 Usage:
 ------
 
-    pswrd -simple 'any string'
-
-Simple mode. Generate password based on input string. Ommiting 'any string' will prompt for input. Example:
-
-    pswrd -simple 'https://github.com/username'
-
-Output:
-
-    cNq3nZfjC5rNFl2ri6RN
-
-You can also supply a file instead of a string:
-
-    pswrd -file ~/picture.png
-
 Calling without `-simple` arg will run in advanced mode prompting for master password, user name, domain and password version. These info may be passed in args `-password`, `-user`, `-domain` and `-version` accordingly. "Version" is password version. Default value is "1", increase it when you want make new password for requested the same user+domain pair.
 
 Example:
@@ -44,9 +30,29 @@ Or same in interactive mode:
     
     V5YVTe8Au7oeDn2pVcCq
 
-Note that `-file` doesn't support master password and version.
-
 Output password string will also be placed to the clipboard if `xclip` util is available and `-nc` arg not specified.
+
+
+### Simple mode ###
+
+There is also simple mode:
+
+    pswrd -simple 'any string'
+
+Simple mode. Generate password based on input string. Ommiting 'any string' will prompt for input. Example:
+
+    pswrd -simple 'https://github.com/username'
+
+Output:
+
+    cNq3nZfjC5rNFl2ri6RN
+
+You can also supply a file instead of a string:
+
+    pswrd -file ~/picture.png
+
+Note that `-file` mode doesn't support master password and version.
+
 
 #### Other args
 
