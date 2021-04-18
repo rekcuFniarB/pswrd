@@ -3,6 +3,9 @@ pswrd
 
 `pswrd` is a simple password management util. It doesn't store passwords anywhere, generating output on the fly.
 
+There is also [GUI version with Android support](https://github.com/rekcuFniarB/pswrd.py#readme).
+
+
 Usage:
 ------
 
