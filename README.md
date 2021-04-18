@@ -5,6 +5,7 @@ pswrd
 
 There is also [GUI version with Android support](https://github.com/rekcuFniarB/pswrd.py#readme).
 
+Why this wheel was reinvented? Well, I needed a simple util which doesn't require syncing data between devices.
 
 Usage:
 ------
